@@ -3,14 +3,14 @@
 
   <div id="LeftLineNumber" class="lineNumber">
     {{ leftLineNumbers }}</div>
-  <div id="LeftDiff" @input="onLeftInput" class="diffInput" contentEditable="true">
+  <div id="LeftDiff" @input="onLeftInput" @paste="onPaste" class="diffInput" contentEditable="true">
     {{ leftDiffText }}
   </div>
 
   <div id="RightLineNumber" class="lineNumber">
     {{ rightLineNumbers }}
   </div>
-  <div id="RightDiff" @input="onRightInput"  class="diffInput" contentEditable="true">
+  <div id="RightDiff" @input="onRightInput"  @paste="onPaste" class="diffInput" contentEditable="true">
     {{ rightDiffText }}
   </div>
 
@@ -34,14 +34,21 @@ export default {
   },
 
   methods: {
+    onPaste(e) {
+        e.preventDefault();
+
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        document.execCommand("insertText", true, text);
+    },
     onLeftInput(e) {
+
         let html = e.target.innerHTML;
-        console.log(html);
 
         this.leftLineNumbers = '';
         this.leftLineNumbers = this.getLineNumbers(html);
     },
     onRightInput(e) {
+        this.rightLineNumbers = this.getLineNumbers(html);
         let html = e.target.innerHTML;
         this.rightLineNumbers = '';
         this.rightLineNumbers = this.getLineNumbers(html);
@@ -49,7 +56,7 @@ export default {
 
     getLineNumbers(html) {
         let lineNums = '';
-        let totalLineNums = (html.match(/(<div>.*?<\/div>)|(^\S*?(?=<div>))/g) || [1]).length;
+        let totalLineNums = (html.match(/((<div>).*?(<\/div>))|(^\S*?(?=<div>))/mg) || [1]).length;
         console.log(html.match(/(<div>.*?<\/div>)|(^\S*?(?=<div>))/g));
 
         for (let i = 1; i <= totalLineNums; i++) {
@@ -75,6 +82,8 @@ export default {
   width: 50%;
   margin: 15px 15px 15px 0;
   background-color: white;
+  white-space: nowrap;
+  overflow-x: scroll;
 }
 
 .lineNumber {
