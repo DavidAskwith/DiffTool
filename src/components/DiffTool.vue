@@ -4,7 +4,7 @@
   <div id="LeftLineNumber" class="lineNumber">
     {{ leftLineNumbers }}</div>
   <div ref="LeftDiff" id="LeftDiff"
-    @input="onInput" @paste="onPaste" 
+    @input="onInput" @paste="onPaste"
     class="diffInput" contentEditable="true"
     v-html="leftDiffText">
   </div>
@@ -13,11 +13,11 @@
     {{ rightLineNumbers }}
   </div>
   <div ref="RightDiff"
-    @input="onInput"  @paste="onPaste" 
+    @input="onInput"  @paste="onPaste"
     class="diffInput" contentEditable="true"
     v-html="rightDiffText">
   </div>
-  <button @click="identifyDiffs">Test</button>
+  <button @click="identifyDiffs">Diff</button>
 </div>
 </template>
 
@@ -50,7 +50,7 @@ export default {
         } else {
             this.onRightInput(html);
         }
-  //      this.identifyDiffs();
+        //this.identifyDiffs();
     },
     onLeftInput(html) {
         this.leftLineNumbers = '';
